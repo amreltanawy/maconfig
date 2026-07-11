@@ -35,12 +35,17 @@
     #onActivation.cleanup ="" "zap";  # remove anything not listed here
     onActivation.autoUpdate = true;
     onActivation.extraFlags = [ "--force" ];
+    taps = [
+      "anomalyco/tap"
+    ];
     brews = [
       "herdr"
+      "anomalyco/tap/opencode"
     ];
     casks = [
       "wezterm"
       "claude-code"
+      "cursor-cli"
     ];
   };
 }

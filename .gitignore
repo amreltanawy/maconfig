@@ -10,3 +10,6 @@ result-*
 
 # no-mistakes local validation state - never commit in this public repo
 .no-mistakes/
+
+# pre-switch backups of existing user configs (created by scripts/backup-managed-config.sh)
+backup_config/

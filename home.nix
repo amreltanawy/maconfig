@@ -35,8 +35,10 @@ in
       push = "git push";
       pull = "git pull";
       m = "git switch main";
+      agent = "cursor-agent";
       cc = "claude --dangerously-skip-permissions";
       co = "codex --full-auto";
+      oc = "opencode --auto";
     };
   };
 
