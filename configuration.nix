@@ -28,10 +28,11 @@
   nix-homebrew = {
     enable = true;
     inherit user;
+    autoMigrate = true;
   };
   homebrew = {
     enable = true;
-    onActivation.cleanup = "zap";  # remove anything not listed here
+    #onActivation.cleanup ="" "zap";  # remove anything not listed here
     onActivation.autoUpdate = true;
     onActivation.extraFlags = [ "--force" ];
     brews = [

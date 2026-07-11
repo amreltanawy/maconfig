@@ -1,5 +1,5 @@
 {
-  description = "dotfiles";
+  description = "amreltanawy's darwin system";
 
   inputs = {
     # Use `github:NixOS/nixpkgs/nixpkgs-26.05-darwin` to use Nixpkgs 26.05.
@@ -14,15 +14,15 @@
     nix-homebrew.url = "github:zhaofengli/nix-homebrew";
   };
 
-  outputs = inputs@{ self, nix-darwin, nix-homebrew, home-manager, nixpkgs }:
+  outputs = inputs@{ self, nix-darwin, nix-homebrew, home-manager, nixpkgs }: 
     let
       # The one username line to change if this isn't your machine.
       # bootstrap.sh offers to rewrite this for you if your macOS username differs.
-      user = "kunchen";
+      user = "amreltanawy";
     in
-    {
-      darwinConfigurations."mac" = nix-darwin.lib.darwinSystem {
-        specialArgs = { inherit user; };
+  {
+    darwinConfigurations."MacBook-Pro-2" = nix-darwin.lib.darwinSystem {
+    specialArgs = { inherit user; };
         modules = [
           ./configuration.nix
           nix-homebrew.darwinModules.nix-homebrew
@@ -34,6 +34,6 @@
             home-manager.users.${user} = import ./home.nix;
           }
         ];
-      };
     };
+  };
 }
