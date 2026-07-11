@@ -7,12 +7,15 @@ backup_managed_config() {
   local backup_root="$repo_dir/backup_config"
 
   # Paths home-manager manages in home.nix (symlinks + programs.zsh).
+  # .zprofile is included because its usual contents (PATH entries, nvm)
+  # are provided by home.nix now; a leftover copy would load things twice.
   local paths=(
     .config/nvim
     .config/wezterm
     .config/herdr
     .claude/settings.json
     .zshrc
+    .zprofile
   )
 
   local rel target dest link dest_dir backed_up=false
@@ -23,7 +26,10 @@ backup_managed_config() {
 
     if [[ -L "$target" ]]; then
       link="$(readlink "$target")"
-      if [[ "$link" == "$repo_dir/"* ]] || [[ "$link" == "$HOME/.maconfig/"* ]]; then
+      # Skip links that already point at this repo, and links home-manager
+      # itself created (they point into /nix/store); backing those up would
+      # move our own managed config aside on every rebuild.
+      if [[ "$link" == "$repo_dir/"* ]] || [[ "$link" == "$HOME/.maconfig/"* ]] || [[ "$link" == /nix/store/* ]]; then
         continue
       fi
     elif [[ "$rel" == ".zshrc" && -f "$target" ]]; then

@@ -21,6 +21,12 @@ in
   ];
   fonts.fontconfig.enable = true;
   home.sessionVariables.EDITOR = "nvim";
+  # Tools installed outside nix that still need to be on PATH:
+  # ~/.local/bin (claude native installer, supermux) and the manual flutter checkout.
+  home.sessionPath = [
+    "$HOME/.local/bin"
+    "$HOME/develop/flutter/bin"
+  ];
 
   programs.zsh = {
     enable = true;
@@ -28,6 +34,14 @@ in
     syntaxHighlighting.enable = true;  # commands turn green when valid
     initContent = ''
       bindkey '^f' autosuggest-accept
+
+      # dart-cli-completion writes this file when dart tools set up completions
+      [[ -f "$HOME/.dart-cli-completion/zsh-config.zsh" ]] && . "$HOME/.dart-cli-completion/zsh-config.zsh" || true
+
+      # nvm is installed per-machine by its curl installer; load it if present
+      export NVM_DIR="$HOME/.nvm"
+      [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+      [ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"
     '';
     shellAliases = {
       ".." = "cd ..";
