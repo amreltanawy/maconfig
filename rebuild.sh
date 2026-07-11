@@ -15,4 +15,19 @@ fi
 echo "==> Backing up existing configs that would be clobbered"
 backup_managed_config "$DIR"
 
-exec sudo darwin-rebuild switch --flake ~/.maconfig#"$FLAKE_HOST"
+cd "$DIR"
+
+echo "==> Building system configuration"
+darwin-rebuild build --flake ~/.maconfig#"$FLAKE_HOST"
+
+SYSTEM="$(readlink "$DIR/result")"
+if [ -z "$SYSTEM" ] || [ ! -x "$SYSTEM/activate" ]; then
+  echo "Could not find built system at $DIR/result"
+  exit 1
+fi
+
+echo "==> Activating system configuration (sudo required)"
+# herdr and similar tools can recreate managed paths while the build runs.
+backup_managed_config "$DIR"
+sudo nix-env -p /nix/var/nix/profiles/system --set "$SYSTEM"
+exec sudo "$SYSTEM/activate"
